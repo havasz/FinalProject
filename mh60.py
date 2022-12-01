@@ -24,8 +24,8 @@ class MH60(Sprite):
         self.rect.left = self.screen_rect.left
         self.rect.top = self.screen_rect.top
         # store decimal value for mh60 horizontal position
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.x)
+        self.x = 0
+        self.y = self.screen_rect.height / 2
 
         #movement flags
         self.moving_r = False
@@ -55,5 +55,5 @@ class MH60(Sprite):
 
     def center_mh60(self):
         "reset mh60 to bottom left of screen"
-        self.rect.top = self.screen_rect.top
+        self.rect.y = self.screen_rect.height / 2
         self.rect.left = self.screen_rect.left

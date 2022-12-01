@@ -280,7 +280,7 @@ class DdgDefense:
 
     def update_screen(self):
         """update images on the screen and flip to new screen"""
-        self.screen.blit(self.bg,(0,0))
+        self.screen.blit(self.bg,(0, 0))
         self.ddg.blitme()
         self.mh60.blitme()
         for missile in self.missiles.sprites():
