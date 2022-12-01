@@ -21,8 +21,8 @@ class MH60(Sprite):
         self.rect =  res_rect
 
         # start position left/middle
+        self.rect.y = self.screen_rect.height / 2
         self.rect.left = self.screen_rect.left
-        self.rect.top = self.screen_rect.top
         # store decimal value for mh60 horizontal position
         self.x = 0
         self.y = self.screen_rect.height / 2
