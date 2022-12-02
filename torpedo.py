@@ -12,6 +12,7 @@ class Torpedo(Sprite):
         # create torpedo at (0,0) then correct position
         self.rect = py.Rect(0,0,self.settings.torpedo_width,self.settings.torpedo_height)
         self.rect.midright = dd_game.ddg.rect.midright
+        self.rect.y = dd_game.ddg.rect.y + 80
 
         # store position as decimal
         self.x = float(self.rect.x)

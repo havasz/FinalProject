@@ -1,5 +1,6 @@
 import pygame as py
 from pygame.sprite import Sprite
+import random
 
 class Drone(Sprite):
     "class represent one drone"
@@ -20,19 +21,20 @@ class Drone(Sprite):
         self.image = res_image
         self.rect = res_rect
         # start position top left screen
-        self.rect.right = self.screen_rect.right
+        self.rect.left = self.screen_rect.right
         self.rect.y = self.screen_rect.height / 2
 
         #store drones horizontal/vertical position
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+        z = random.randint(0, dd_game.settings.screen_height)
+        self.x = self.screen_rect.right
+        self.y = z
 
     def check_edges(self):
         self.screen.rect = self.screen.get_rect()
         if self.rect.bottom >= self.screen_rect.bottom or self.rect.top <= 0:
             return True
 
-    def update(self):
+    def update(self, dd_game):
         "move boat left/up/down"
         self.x -= self.settings.drone_speed_x
         self.rect.x = self.x

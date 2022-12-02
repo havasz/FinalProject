@@ -12,6 +12,7 @@ class Missile(Sprite):
         # create missile at (0,0) then correct position
         self.rect = py.Rect(0,0,self.settings.missile_width,self.settings.missile_height)
         self.rect.midright = dd_game.mh60.rect.midright
+        self.rect.y = dd_game.mh60.rect.y + 20
 
         # store position as decimal
         self.x = float(self.rect.x)
