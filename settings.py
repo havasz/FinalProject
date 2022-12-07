@@ -34,16 +34,15 @@ class Settings:
     def initialize_dynamic_settings(self):
         # boat/drone settings
         self.boat_speed = 0.5
-        self.drone_speed_x = 1.0
-        self.drone_speed_y = 1.5
-        self.drone_direction = -1.0
+        self.drone_speed_x = 0.5
+        self.drone_speed_y = 0.1
         self.boat_points = 100
         self.drone_points = 50
+        self.direction = -1
 
     def increase_speed(self):
         self.boat_speed *= self.speedup_scale
         self.drone_speed_x *= self.speedup_scale
         self.drone_speed_y *= self.speedup_scale
-        self.drone_direction *= self.speedup_scale
         self.boat_points = int(self.boat_points * self.score_scale)
         self.drone_points = int(self.drone_points * self.score_scale)

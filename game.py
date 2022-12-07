@@ -230,6 +230,7 @@ class DdgDefense:
 
     def update_drones(self):
         """check for drone and ddg/hm60 collisions"""
+        self.drones.update()
         if py.sprite.spritecollideany(self.ddg, self.drones):
             self.drone_ddg_hit()
         elif py.sprite.spritecollideany(self.mh60, self.drones):
