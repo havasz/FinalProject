@@ -14,16 +14,11 @@ class Boat(Sprite):
         self.rect = self.image.get_rect()
 
         # start position bottom right screen
-        self.rect.right = self.screen_rect.right
+        self.rect.left = self.screen_rect.right
         self.rect.bottom = self.screen_rect.bottom
 
         #store boats horizontal position
         self.x = float(self.rect.x)
-
-    def check_edges(self):
-        self.screen.rect = self.screen.get_rect()
-        if self.rect.bottom >= self.screen_rect.bottom or self.rect.top <= 0:
-            return True
 
     def update(self):
         "move boat left"

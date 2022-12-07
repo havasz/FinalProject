@@ -20,23 +20,19 @@ class Drone(Sprite):
         res_rect = res_image.get_rect(center=self.rect.center)
         self.image = res_image
         self.rect = res_rect
+
         # start position top left screen
-        self.rect.left = self.screen_rect.right
-        self.rect.y = self.screen_rect.height / 2
+        self.rect.right = self.screen_rect.right
+        z = random.randint(0, dd_game.settings.screen_height)
+        self.rect.y = z
 
         #store drones horizontal/vertical position
-        z = random.randint(0, dd_game.settings.screen_height)
-        self.x = self.screen_rect.right
-        self.y = z
+        self.x = float(self.rect.x)
+        # self.y = float(self.rect.y)
 
-    def check_edges(self):
-        self.screen.rect = self.screen.get_rect()
-        if self.rect.bottom >= self.screen_rect.bottom or self.rect.top <= 0:
-            return True
-
-    def update(self, dd_game):
+    def update(self):
         "move boat left/up/down"
         self.x -= self.settings.drone_speed_x
         self.rect.x = self.x
-        self.y += (self.settings.drone_speed_y * self.settings.drone_direction)
-        self.rect.y = self.x
+        # self.y += (self.settings.drone_speed_y * self.settings.drone_direction)
+        # self.rect.y = self.y

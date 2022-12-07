@@ -1,6 +1,6 @@
 import pygame
 import pygame as py
-# from pygame.locals import *
+from pygame.locals import *
 import sys
 # import time
 from settings import Settings
@@ -13,6 +13,7 @@ from boat import Boat
 from drone import Drone
 from torpedo import Torpedo
 from missile import Missile
+import sound_effects as se
 
 
 class DdgDefense:
@@ -20,12 +21,16 @@ class DdgDefense:
     def __init__(self):
         """initialize game and create all resources"""
         py.init()  # initilize
+        # music and sound effects
+
         # screen and background
         self.settings = Settings()
         self.screen = py.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.bg = py.image.load("images/bg.png")
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
+        self.bg = py.transform.scale(self.bg, (self.settings.screen_width,self.settings.screen_height))
+        self.i = 0
         py.display.set_caption("DDG Defense")
         # stores games stats and creates scoreboard
         self.stats = GameStats(self)
@@ -37,24 +42,24 @@ class DdgDefense:
         self.drones = py.sprite.Group()
         self.torpedos = py.sprite.Group()
         self.missiles = py.sprite.Group()
-        self.create_attack()
         # makes play button
         self.play_button = Button(self, "Play")
+        self.play_game = False
+        self.show_instructions = False
+        self.show_start = True
+        # background music
+        se.bg_sound.play()
 
     def run_game(self):
         """main loop for game"""
         while True:
             self.check_events()
-            if self.stats.game_active:
-                # self.check_events()
-                self.ddg.update()
-                self.mh60.update()
-                self.update_boats()
-                self.update_drones()
-                self.update_torpedos()
-                self.update_missiles()
-            # self.check_events()
-            self.update_screen()
+            if self.play_game:
+                self.game()
+            elif self.show_instructions:
+                self.instructions()
+            elif self.show_start:
+                self.start_screen()
 
     def check_events(self):
         """responses to pressing key or clicking mouse"""
@@ -68,6 +73,31 @@ class DdgDefense:
             elif event.type == py.MOUSEBUTTONDOWN:
                 mouse_pos = py.mouse.get_pos()
                 self.check_play_button(mouse_pos)
+
+    def start_screen(self):
+        self.screen.fill((0, 0, 0))
+        start = py.image.load("images/start.png")
+        start = py.transform.scale(start, (self.screen.get_width(), self.screen.get_height()))
+        self.screen.blit(start,(0,0))
+        py.display.flip()
+
+    def instructions(self):
+        self.screen.fill((0,0,0))
+        instructions = py.image.load("images/instructions.png")
+        instructions = py.transform.scale(instructions, (self.screen.get_width(), self.screen.get_height()))
+        self.screen.blit(instructions, (0,0))
+        py.display.flip()
+
+    def game(self):
+        if self.stats.game_active:
+            # self.check_events()
+            self.ddg.update()
+            self.mh60.update()
+            self.update_boats()
+            self.update_drones()
+            self.update_torpedos()
+            self.update_missiles()
+        self.update_screen()
 
     def check_play_button(self, mouse_pos):
         """start new game when player clicks play"""
@@ -107,6 +137,10 @@ class DdgDefense:
             self.mh60.moving_r = True
         elif event.key == py.K_q:
             sys.exit()
+        elif event.key == py.K_p:
+            self.play_game = True
+        elif event.key == py.K_i:
+            self.show_instructions = True
         elif event.key == py.K_SPACE:
             self.fire_torpedos()
         elif event.key == py.K_f:
@@ -131,6 +165,7 @@ class DdgDefense:
         if len(self.missiles) < self.settings.missiles_allowed:
             new_missile = Missile(self)
             self.missiles.add(new_missile)
+            se.missile_sound.play()
 
     def update_missiles(self):
         """update position and get rid of old missiles"""
@@ -147,17 +182,20 @@ class DdgDefense:
             self.stats.score += self.settings.boat_points
             self.sb.prep_score()
             self.sb.check_high_score()
+            se.explosion.play()
         collision_drone_missile = pygame.sprite.groupcollide(self.missiles, self.drones, True, True)
         if collision_drone_missile:
             self.stats.score += self.settings.drone_points
             self.sb.prep_score()
             self.sb.check_high_score()
+            se.explosion.play()
 
     def fire_torpedos(self):
         """create torpedo and add to torpedo group"""
         if len(self.torpedos) < self.settings.torpedos_allowed:
             new_torpedo = Torpedo(self)
             self.torpedos.add(new_torpedo)
+            se.torpedo_sound.play()
 
     def update_torpedos(self):
         """update position and get rid of old torpedo"""
@@ -174,14 +212,17 @@ class DdgDefense:
             self.stats.score += self.settings.boat_points
             self.sb.prep_score()
             self.sb.check_high_score()
+            se.explosion.play()
         collision_drone_torpedo = pygame.sprite.groupcollide(self.torpedos, self.drones, True, True)
         if collision_drone_torpedo:
             self.stats.score += self.settings.drone_points
             self.sb.prep_score()
             self.sb.check_high_score()
+            se.explosion.play()
 
     def update_boats(self):
         """check for boat and ddg/hm60 collisions"""
+        self.boats.update()
         if py.sprite.spritecollideany(self.ddg, self.boats):
             self.boat_ddg_hit()
         elif py.sprite.spritecollideany(self.mh60, self.boats):
@@ -196,6 +237,7 @@ class DdgDefense:
 
     def boat_ddg_hit(self):
         """respond to boat ddg collison"""
+        se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
             self.stats.health -= 10
@@ -217,6 +259,7 @@ class DdgDefense:
 
     def drone_ddg_hit(self):
         """respond to drone ddg collison"""
+        se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
             self.stats.health -= 5
@@ -238,6 +281,7 @@ class DdgDefense:
 
     def boat_mh60_hit(self):
         """respond to boat mh60 collison"""
+        se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
             self.stats.health -= 25
@@ -259,6 +303,7 @@ class DdgDefense:
 
     def drone_mh60_hit(self):
         """respond to drone mh60 collison"""
+        se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
             self.stats.health -= 15
@@ -280,14 +325,22 @@ class DdgDefense:
 
     def update_screen(self):
         """update images on the screen and flip to new screen"""
-        self.screen.blit(self.bg,(0, 0))
+        # scrolling background thank you Eli
+        self.screen.blit(self.bg,(self.i, 0))
+        self.screen.blit(self.bg, (self.settings.screen_width + self.i, 0))
+        if self.i == -self.settings.screen_width:
+            self.screen.blit(self.bg, (self.settings.screen_width + self.i, 0))
+            self.i = 0
+        self.i -= 0.5
         self.ddg.blitme()
         self.mh60.blitme()
         for missile in self.missiles.sprites():
             missile.draw_missile()
         for torpedo in self.torpedos.sprites():
             torpedo.draw_torpedo()
+        self.update_boats()
         self.boats.draw(self.screen)
+        self.update_drones()
         self.drones.draw(self.screen)
         self.sb.show_score()
         if not self.stats.game_active:
@@ -296,14 +349,8 @@ class DdgDefense:
 
     def create_attack(self):
         boat = Boat(self)
-        boat_width, boat_height = boat.rect.size
-        boat.rect.x = boat_width
-        boat.rect.y = boat_height
         self.boats.add(boat)
         drone = Drone(self)
-        drone_width, drone_height = drone.rect.size
-        drone.rect.x = drone_width
-        drone.rect.y = drone_height
         self.drones.add(drone)
 
 

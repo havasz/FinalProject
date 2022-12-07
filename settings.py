@@ -17,7 +17,7 @@ class Settings:
         self.torpedo_speed = 5.0
         self.torpedo_height = 10
         self.torpedo_width = 80
-        self.torpedo_color = (54 ,54 , 54)
+        self.torpedo_color = (20 ,20 , 20)
         self.torpedos_allowed = 1
 
         self.missile_speed = 2.5
@@ -29,10 +29,11 @@ class Settings:
         # change dynamic settings
         self.speedup_scale = 1.1
         self.score_scale = 1.5
+        self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
         # boat/drone settings
-        self.boat_speed = 1.0
+        self.boat_speed = 0.5
         self.drone_speed_x = 1.0
         self.drone_speed_y = 1.5
         self.drone_direction = -1.0
