@@ -24,7 +24,7 @@ class Settings:
         self.missile_height = 5
         self.missile_width = 20
         self.missile_color = (100, 1, 1)
-        self.missiles_allowed = 2
+        self.missiles_allowed = 4
 
         # change dynamic settings
         self.speedup_scale = 1.1
