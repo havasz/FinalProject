@@ -9,7 +9,7 @@ class Settings:
         self.bg = py.image.load("images/bg.png")
 
         # ddg/mh60 settings
-        self.ddg_speed = 0.5
+        self.ddg_speed = 0.75
         self.mh60_speed = 1.5
         self.health = 500
 
