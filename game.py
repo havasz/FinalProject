@@ -258,6 +258,7 @@ class DdgDefense:
             # decrease health points and update scoreboard
             self.stats.health -= 10
             self.sb.prep_health()
+            self.regen_boat()
         if self.stats.health <= 0:
             self.stats.game_active = False
             # delete remaining boats/drones and missiles/torpedos
@@ -278,6 +279,7 @@ class DdgDefense:
             # decrease health points and update scoreboard
             self.stats.health -= 5
             self.sb.prep_health()
+            self.regen_drone()
         if self.stats.health <= 0:
             self.stats.game_active = False
             # delete remaining boats/drones and missiles/torpedos
@@ -298,8 +300,8 @@ class DdgDefense:
             # decrease health points and update scoreboard
             self.stats.health -= 25
             self.sb.prep_health()
-            for self.boat in self.boats:
-                 self.boats.remove(self.boat)
+            self.boats.remove(self.boat)
+            self.regen_boat()
         if self.stats.health <= 0:
             self.stats.game_active = False
             # delete remaining boats/drones and missiles/torpedos
@@ -320,8 +322,8 @@ class DdgDefense:
             # decrease health points and update scoreboard
             self.stats.health -= 15
             self.sb.prep_health()
-            for self.drone in self.drones:
-                self.drones.remove(self.drone)
+            self.drones.remove(self.drone)
+            self.regen_drone()
         if self.stats.health <= 0:
             self.stats.game_active = False
             # delete remaining boats/drones and missiles/torpedos

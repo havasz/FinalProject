@@ -14,13 +14,13 @@ class Settings:
         self.health = 500
 
         # weapons settings
-        self.torpedo_speed = 5.0
+        self.torpedo_speed = 6.0
         self.torpedo_height = 10
         self.torpedo_width = 80
         self.torpedo_color = (20 ,20 , 20)
         self.torpedos_allowed = 1
 
-        self.missile_speed = 2.5
+        self.missile_speed = 4
         self.missile_height = 5
         self.missile_width = 20
         self.missile_color = (100, 1, 1)
