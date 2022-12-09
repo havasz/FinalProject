@@ -182,6 +182,7 @@ class DdgDefense:
             self.stats.score += self.settings.boat_points
             self.sb.prep_score()
             self.sb.check_high_score()
+            self.regen_boat()
             se.explosion.play()
         collision_drone_missile = pygame.sprite.groupcollide(self.missiles, self.drones, True, True)
         if collision_drone_missile:
@@ -215,6 +216,8 @@ class DdgDefense:
             self.sb.check_high_score()
             se.explosion.play()
             self.regen_boat()
+            self.stats.level += 1
+            self.sb.prep_level()
         collision_drone_torpedo = pygame.sprite.groupcollide(self.torpedos, self.drones, True, True)
         if collision_drone_torpedo:
             self.stats.score += self.settings.drone_points
@@ -250,15 +253,16 @@ class DdgDefense:
                 self.drones.remove(self.drone)
             self.regen_drone()
             self.drone_mh60_hit()
-
     def boat_ddg_hit(self):
-        """respond to boat ddg collison"""
+        """responing to boat ddg collison"""
         se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
-            self.stats.health -= 10
+            self.stats.health -= 25
             self.sb.prep_health()
             self.regen_boat()
+            self.stats.level -= 1
+            self.sb.prep_level()
         if self.stats.health <= 0:
             self.stats.game_active = False
             # delete remaining boats/drones and missiles/torpedos
@@ -277,7 +281,7 @@ class DdgDefense:
         se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
-            self.stats.health -= 5
+            self.stats.health -= 15
             self.sb.prep_health()
             self.regen_drone()
         if self.stats.health <= 0:
@@ -298,7 +302,7 @@ class DdgDefense:
         se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
-            self.stats.health -= 25
+            self.stats.health -= 50
             self.sb.prep_health()
             self.boats.remove(self.boat)
             self.regen_boat()
@@ -320,7 +324,7 @@ class DdgDefense:
         se.explosion.play()
         if self.stats.health > 0:
             # decrease health points and update scoreboard
-            self.stats.health -= 15
+            self.stats.health -= 25
             self.sb.prep_health()
             self.drones.remove(self.drone)
             self.regen_drone()
@@ -373,7 +377,7 @@ class DdgDefense:
 
     def regen_drone(self):
         """Create fleet of drones."""
-        drone_number = 2 # you can an if statement to change the number of drones regenerated based on game level
+        drone_number = 2
         for n in range(drone_number):
             drone = Drone(self)
             self.drones.add(drone)

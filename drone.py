@@ -24,7 +24,7 @@ class Drone(Sprite):
 
         # start position top left screen
         self.rect.left = self.screen_rect.right
-        z = random.randint(0, dd_game.settings.screen_height)
+        z = random.randint(0, dd_game.settings.screen_height - self.rect.height)
         self.rect.y = z
 
         #store drones horizontal/vertical position
